@@ -1,38 +1,219 @@
-.App {
-  text-align: center;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+  line-height: 1;
+  font-family: 'Rubik', sans-serif;
+  background-color: #f1f1f1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.landing-page{
+  padding:0 15px;
+}
+span{
+  display:inline-block;
+}
+h2,h3{
+  font-weight:bold;
+}
+h2{
+  font-size:36px;
+  margin-bottom:40px;
+  margin-top:10px;
+}
+button:focus{
+  outline:none;
+  border:none;
+  box-shadow:none;
+}
+h3{
+  font-size:24px;
+  text-align:center;
+  padding:60px 0 30px 0;
+}
+h3 span{
+  font-weight:normal;
+}
+.content{
+  display:flex;
+  flex-direction:column;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.content .right-section{
+  flex:1;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.filters .years{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+}
+.filters .years button,.submit-filter{
+   background-color: #c5e09b;
+   padding:5px 15px;
+   border-radius:5px;
+   font-size:16px;
+   border:none;
+   box-shadow:none;
+   cursor:pointer;
+}
+.filters{
+  background-color: #fff;
+  padding:5px 5px 40px 5px;
+  border-radius:2px;
+}
+.filters h4{
+  font-weight:bold;
+}
+.filters h5{
+  position:relative;
+  text-align:center;
+  padding:10px 0 2px 0;
+  margin-bottom:15px;
+}
+.filters>div{
+  padding:0 15px;
+}
+.filters h5:before{
+  position:absolute;
+  top:100%;
+  height:2px;
+  width:calc(100% - 30px);
+  content:"";
+  background-color: #ddd;
+  left:15px;
+}
+.successfull-launch,.successfull-landing{
+  padding-top:20px;
+}
+.right-section .column{
+  background-color: #fff;
+  padding:15px ;
+  border-radius:5px;
+}
+.column img{
+  max-width:100%;
+  height:200px;
+}
+.column>div{
+  margin-bottom:15px;
+}
+.column .image-block{
+  background:#f2f2f2;
+  text-align:center;
+  margin-bottom:10px;
+}
+.column a{
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom:15px;
+  font-weight:bold;
+}
+.column a:hover{
+  text-decoration: none;
+}
+.column h6{
+  font-weight:bold;
+  display:inline-block;
+}
+.mission-id-div h6{
+  display: block;
+}
+.column span{
+  color:#9c9aa3;
+  font-size:12px;
+}
+.landing{
+  display:flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.right-section{
+  margin-top:15px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.launch-year ul{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.launch-year ul li{
+  margin-bottom:15px;
+}
+.submit-filter{
+  margin:20px auto;
+  background:lightblue;
+}
+.submit-section{
+  text-align:center;
+}
+.error{
+  display:block;
+  color:red;
+  font-size:12px;
+  height:20px;
+}
+@media only screen and (min-width:700px){
+  .content .left-section{
+    width:200px;
+    margin-right:15px;
   }
-  to {
-    transform: rotate(360deg);
+  .right-section{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-gap:15px;
+    margin-top:0;
+  }
+  .content{
+    flex-direction:row;
+  }
+}
+@media only screen and (min-width:1024px){
+  .right-section{
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+@media only screen and (min-width:1440px){
+  .landing-page{
+    max-width:1440px;
+    margin:0 auto;
+  }
+  .right-section{
+    grid-template-columns: 1fr;    
   }
 }
