@@ -1,6 +1,5 @@
 import React,{ Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import {connect} from 'react-redux';
 
 class FilterPage extends Component{
@@ -13,36 +12,23 @@ class FilterPage extends Component{
         this.getData = this.getData.bind(this);         
     }
     async getData(){
-        let res = await axios.get('https://api.spacexdata.com/v3/launches?limit=100');
-        console.log(res.data);
-        var data = [];
+        var collectedData = [];
         if(this.props.launchYear.length>0 && this.props.launch.length>0 ){
-            console.log(this.props.launchYear,this.props.launch)
-            data = res.data.filter((item)=>
-                this.props.launchYear.filter(val=> val===item.launch_year && this.props.launch===item.launch_success.toString())
-            )            
+            this.props.launchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val && item.launch_success.toString()===this.props.launch)))          
         }
         if(this.props.launchYear.length>0 && this.props.launch.length===0 ){
-            console.log(this.props.launchYear[0],this.props.launch,this.props.launchYear.length>0 && this.props.launch.length===0)
-            data = res.data.filter((item)=>
-                this.props.launchYear.filter(val=> val===item.launch_year )
-            )            
-            console.log(data)            
+            this.props.launchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val)))                       
         }   
         
-        if(this.props.launchYear.length===0 && this.props.launch.length>0 ){
-            console.log(this.props.launchYear,this.props.launch)
-            data = res.data.filter((item)=> this.props.launch===item.launch_success.toString())            
+        if(this.props.launchYear.length===0 && this.props.launch.length>0 ){            
+            collectedData = await this.props.datas.filter((item)=> this.props.launch===item.launch_success.toString())
         }
-        
-        console.log(data);
-        this.setState({data: data.length!==0 ? data.slice(0,8) : res.data.filter(val=>val.launch_year==="2006") })        
+        return await this.setState({data:collectedData.slice(0,8)})      
     }
-    componentDidMount(){
+    componentWillMount(){
         this.getData();
     }    
-    render(){  
-        console.log(this.state.data,this.state)      
+    render(){       
         return(
             <div className="landing-page">
                 <h2>SpaceEx Launch Programs</h2>
@@ -116,7 +102,8 @@ class FilterPage extends Component{
 const mapStateToProps = (state)=>({
     launchYear : state.allReducers.launchYear,
     landing : state.allReducers.landing,
-    launch : state.allReducers.launch
+    launch : state.allReducers.launch,
+    datas : state.allReducers.data
 })
 
 export default connect(mapStateToProps,null)(FilterPage)

@@ -10,6 +10,7 @@ class LandingPage extends Component{
         super(props);
         this.state = {
             data : [],
+            alldata : [],
             launchYear : [2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],
             successfullLaunch : "",
             successfullLanding : "",
@@ -23,46 +24,36 @@ class LandingPage extends Component{
     }
     async getData(){
         let res = await axios.get('https://api.spacexdata.com/v3/launches?limit=100');
-        console.log(res.data);
-        let data = res.data;
-        this.setState({data:res.data.slice(0,8)})        
+        this.setState({alldata:res.data,data:res.data.slice(0,8)})        
     }
     componentDidMount(){
         this.getData();
     }
     handleClick(e){
         e.preventDefault();
-        console.log(e.target.className);
         e.target.selected = !e.target.selected;        
-        e.target.style.backgroundColor = e.target.selected===true ? "#7cba18" : "#c5e09b";
-        console.log(e.target.selected,e.target.style,e.target.style.backgroundColor,e.target.innerText);
-        var yearArray = []
-        if(e.target.className==="year-count"){        
-            yearArray.push(e.target.innerText);
-            this.setState({successfullLaunchYear:this.state.successfullLaunchYear.some(el=>el===e.target.innerText)? this.state.successfullLaunchYear : this.state.successfullLaunchYear.concat(e.target.innerText)});            
+        e.target.style.backgroundColor = e.target.selected===true ? "#7cba18" : "#c5e09b";    
+        if(e.target.className==="year-count"){ 
+            if(!e.target.selected) return this.setState({successfullLaunchYear : this.state.successfullLaunchYear.filter(item=>item!==e.target.innerText)})            
+            else return this.setState({successfullLaunchYear:this.state.successfullLaunchYear.some(el=>el===e.target.innerText)? this.state.successfullLaunchYear : this.state.successfullLaunchYear.concat(e.target.innerText)});            
         } 
-        if(e.target.className==="launch-count") this.setState({successfullLaunch:e.target.innerText})
+        if(e.target.className==="launch-count"){
+            this.setState({successfullLaunch:e.target.innerText})        
+        } 
         if(e.target.className==="landing-count") this.setState({successfullLanding:e.target.innerText})
-        console.log(this.state,e.target.className,e.target.className==="launch-count",e.target.innerText);
-        console.log(this.state.successfullLaunchYear);
     }
     handleSubmit(e){
         e.preventDefault();
-        console.log("Starting");
-        if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch==="" && this.state.successfullLanding===""){
+        if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch===""){
             this.setState({error:"No filter selected"});
-            console.log(this.state.error,"Failure")
         }
         else{
             this.setState({error:"",redirect : true});
-            const data={landing:this.state.successfullLanding,launch:this.state.successfullLaunch,year:this.state.successfullLaunchYear};
-            this.props.filter(data)
-            console.log("Success",data);            
-        }   
-        console.log("Ending");     
+            const data={sendData: this.state.alldata,landing:this.state.successfullLanding,launch:this.state.successfullLaunch,year:this.state.successfullLaunchYear};
+            this.props.filter(data)           
+        }        
     }
-    render(){  
-        console.log(this.state.data,this.state);        
+    render(){         
         const redirect = this.state.redirect;
         if (redirect === true) {
             return <Redirect to="/filter" />
