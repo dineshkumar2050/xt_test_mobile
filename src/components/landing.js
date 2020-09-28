@@ -12,15 +12,15 @@ class LandingPage extends Component{
             data : [],
             alldata : [],
             launchYear : [2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],
-            successfullLaunch : "",
-            successfullLanding : "",
+            successfullLaunch : [],
+            successfullLanding : [],
             successfullLaunchYear : [],  
             error:"",
             redirect : false          
         }
         this.handleClick = this.handleClick.bind(this);
         this.getData = this.getData.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);  
+        this.handleSubmit = this.handleSubmit.bind(this);         
     }
     async getData(){
         let res = await axios.get('https://api.spacexdata.com/v3/launches?limit=100');
@@ -38,9 +38,13 @@ class LandingPage extends Component{
             else return this.setState({successfullLaunchYear:this.state.successfullLaunchYear.some(el=>el===e.target.innerText)? this.state.successfullLaunchYear : this.state.successfullLaunchYear.concat(e.target.innerText)});            
         } 
         if(e.target.className==="launch-count"){
-            this.setState({successfullLaunch:e.target.innerText})        
+            if(!e.target.selected) return this.setState({successfullLaunch : this.state.successfullLaunch.filter(item=>item!==e.target.innerText)})            
+            else return this.setState({successfullLaunch:this.state.successfullLaunch.some(el=>el===e.target.innerText)? this.state.successfullLaunch : this.state.successfullLaunch.concat(e.target.innerText)});        
         } 
-        if(e.target.className==="landing-count") this.setState({successfullLanding:e.target.innerText})
+        if(e.target.className==="landing-count"){
+            if(!e.target.selected) return this.setState({successfullLanding : this.state.successfullLanding.filter(item=>item!==e.target.innerText)})            
+            else return this.setState({successfullLanding:this.state.successfullLanding.some(el=>el===e.target.innerText)? this.state.successfullLanding : this.state.successfullLanding.concat(e.target.innerText)});
+        } 
     }
     handleSubmit(e){
         e.preventDefault();
@@ -82,7 +86,7 @@ class LandingPage extends Component{
                            <div className="successfull-launch">
                                <h5>Successfull launch</h5>
                                <div className="years">
-                                   <button selected={false} onClick={this.handleClick} className="launch-count">true</button>
+                                   <button ref={this.checkVal} selected={false} onClick={this.handleClick} className="launch-count">true</button>
                                    <button selected={false} onClick={this.handleClick} className="launch-count">false</button>
                                </div>
                            </div>
@@ -119,7 +123,7 @@ class LandingPage extends Component{
                                     </div>
                                     <div className="landing">
                                         <h6 className="missions">Successfull Landing :</h6>
-                                        <span>Launch Landing</span>
+                                        <span>{item.rocket.first_stage.cores[0].land_success===null? "null" : item.rocket.first_stage.cores[0].land_success.toString()}</span>
                                     </div>
                                 </div>
                             )

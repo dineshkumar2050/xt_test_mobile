@@ -2,8 +2,8 @@ import {FILTER} from '../actions/actionTypes';
 
 const initialState = {
     launchYear : [],
-    launch : "",
-    landing: "",
+    launch : [],
+    landing: [],
     data : []
 }
 
