@@ -24,7 +24,7 @@ class LandingPage extends Component{
     }
     async getData(){
         let res = await axios.get('https://api.spacexdata.com/v3/launches?limit=100');
-        this.setState({alldata:res.data,data:res.data.slice(0,8)})        
+        this.setState({alldata:res.data,data:res.data})        
     }
     componentDidMount(){
         this.getData();

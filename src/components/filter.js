@@ -23,7 +23,7 @@ class FilterPage extends Component{
         if(this.props.launchYear.length===0 && this.props.launch.length>0 ){            
             collectedData = await this.props.datas.filter((item)=> this.props.launch===item.launch_success.toString())
         }
-        return await this.setState({data:collectedData.slice(0,8)})      
+        return await this.setState({data:collectedData})      
     }
     componentWillMount(){
         this.getData();

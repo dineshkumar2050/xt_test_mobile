@@ -166,10 +166,18 @@ h3 span{
 .right-section{
   margin-top:15px;
 }
+
 .launch-year ul{
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows:auto;
+  width: 100%;
+}
+.launch-year ul li:nth-child(even){
+  text-align:right;
 }
 .launch-year ul li{
   margin-bottom:15px;
