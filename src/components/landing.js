@@ -48,8 +48,8 @@ class LandingPage extends Component{
     }
     handleSubmit(e){
         e.preventDefault();
-        if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch===""){
-            this.setState({error:"No filter selected"});
+        if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length===0 && this.state.successfullLanding.length===0 ){
+            return this.setState({error:"No filter selected"});
         }
         else{
             this.setState({error:"",redirect : true});

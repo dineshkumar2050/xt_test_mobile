@@ -5,6 +5,7 @@ import LandingPage from './components/landing';
 import store from './store';
 import {Provider} from 'react-redux';
 import FilterPage from './components/filter';
+import NotFound from './components/notFound';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={ LandingPage } />
             <Route path="/filter" component={ FilterPage } />
+            <Route path="*" component={ NotFound } />
           </Switch>
         </Router>
       </div>

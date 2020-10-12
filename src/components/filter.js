@@ -12,7 +12,7 @@ class FilterPage extends Component{
             successfullLanding : [],
             successfullLaunchYear : [],
             error:"",
-            myColor : ""  
+            dataError : "",
         }
         this.handleClick = this.handleClick.bind(this);
         this.getData = this.getData.bind(this);
@@ -23,39 +23,46 @@ class FilterPage extends Component{
         let collectedData = [];        
         if(this.props.launchYear.length>0 && this.props.launch.length===1 && this.props.landing.length===0){
             await this.props.launchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val && item.launch_success.toString()===this.props.launch[0] )))
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length>0 && this.props.launch.length===1 && this.props.landing.length>0){
             await this.props.launchYear.forEach(eachItem=>this.props.landing.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.launch_year===eachItem && item.launch_success.toString()===this.props.launch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val)))))
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length>0 && this.props.launch.length!==1 && this.props.landing.length===0){
             await this.props.launchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val)))
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length>0 && this.props.launch.length!==1 && this.props.landing.length>0){
             await this.props.launchYear.forEach(val=>this.props.landing.forEach(eachItem=>collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val && item.rocket.first_stage.cores[0].land_success===JSON.parse(eachItem) ))))
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length===0 && this.props.launch.length===1 && this.props.landing.length===0){
             collectedData = await this.props.datas.filter(item=>item.launch_success.toString()===this.props.launch[0])
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length===0 && this.props.launch.length===1 && this.props.landing.length>0){
-            await this.props.landing.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.launch_success===this.props.launch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val) )))
-            return await this.setState({data:collectedData})
+            await this.props.landing.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.launch_success.toString()===this.props.launch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val) )))
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length===0 && this.props.launch.length!==1 && this.props.landing.length===0){
             collectedData = await this.props.datas;
-            return await this.setState({data:collectedData})
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }
         if(this.props.launchYear.length===0 && this.props.launch.length!==1 && this.props.landing.length>0){
-            collectedData = await this.props.landing.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.rocket.first_stage.cores[0].land_success===val)))
-            return await this.setState({data:collectedData})
+            await this.props.landing.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.rocket.first_stage.cores[0].land_success===JSON.parse(val))))
+            if(collectedData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:collectedData,dataError : ""})
         }     
     }
     componentWillMount(){
-        this.setState({myColor:"#c5e09b"})
         this.getData();
     }
     handleClick(e){
@@ -73,55 +80,61 @@ class FilterPage extends Component{
         if(e.target.className==="landing-count"){
             if(!e.target.selected) return this.setState({successfullLanding : this.state.successfullLanding.filter(item=>item!==e.target.innerText)})            
             else return this.setState({successfullLanding:this.state.successfullLanding.some(el=>el===e.target.innerText)? this.state.successfullLanding : this.state.successfullLanding.concat(e.target.innerText)});
-        }         
+        }             
     }
     async filterData(){
         this.setState({data:[]})
-        let collectedData = [];
+        let filteredData = [];
         if(this.state.successfullLaunchYear.length>0 && this.state.successfullLaunch.length===1 && this.state.successfullLanding.length===0){
-            await this.state.successfullLaunchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val && item.launch_success.toString()===this.state.successfullLaunch[0] )))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLaunchYear.forEach(val=> filteredData = filteredData.concat(this.props.datas.filter(item=>item.launch_year===val && item.launch_success.toString()===this.state.successfullLaunch[0] )))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length>0 && this.state.successfullLaunch.length===1 && this.state.successfullLanding.length>0){
-            await this.state.successfullLaunchYear.forEach(eachItem=>this.state.successfullLanding.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.launch_year===eachItem && item.launch_success.toString()===this.state.successfullLaunch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val)))))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLaunchYear.forEach(eachItem=>this.state.successfullLanding.forEach(val=>filteredData=filteredData.concat(this.props.datas.filter(item=>item.launch_year===eachItem && item.launch_success.toString()===this.state.successfullLaunch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val)))))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length>0 && this.state.successfullLaunch.length!==1 && this.state.successfullLanding.length===0){
-            await this.state.successfullLaunchYear.forEach(val=> collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val)))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLaunchYear.forEach(val=> filteredData = filteredData.concat(this.props.datas.filter(item=>item.launch_year===val)))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length>0 && this.state.successfullLaunch.length!==1 && this.state.successfullLanding.length>0){
-            await this.state.successfullLaunchYear.forEach(val=>this.state.successfullLanding.forEach(eachItem=>collectedData = collectedData.concat(this.props.datas.filter(item=>item.launch_year===val && item.rocket.first_stage.cores[0].land_success===JSON.parse(eachItem) ))))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLaunchYear.forEach(val=>this.state.successfullLanding.forEach(eachItem=>filteredData = filteredData.concat(this.props.datas.filter(item=>item.launch_year===val && item.rocket.first_stage.cores[0].land_success===JSON.parse(eachItem) ))))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length===1 && this.state.successfullLanding.length===0){
-            collectedData = await this.props.datas.filter(item=>item.launch_success.toString()===this.state.successfullLaunch[0])
-            return await this.setState({data:collectedData})
+            filteredData = await this.props.datas.filter(item=>item.launch_success.toString()===this.state.successfullLaunch[0])
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length===1 && this.state.successfullLanding.length>0){
-            await this.state.successfullLanding.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.launch_success===this.state.successfullLaunch && item.rocket.first_stage.cores[0].land_success===JSON.parse(val) )))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLanding.forEach(val=>filteredData=filteredData.concat(this.props.datas.filter(item=>item.launch_success.toString()===this.state.successfullLaunch[0] && item.rocket.first_stage.cores[0].land_success===JSON.parse(val) )))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length!==1 && this.state.successfullLanding.length===0){
-            collectedData = await this.props.datas;
-            return await this.setState({data:collectedData})
+            filteredData = await this.props.datas;
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
         if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length!==1 && this.state.successfullLanding.length>0){
-            collectedData = await this.state.successfullLanding.forEach(val=>collectedData=collectedData.concat(this.props.datas.filter(item=>item.rocket.first_stage.cores[0].land_success===val)))
-            return await this.setState({data:collectedData})
+            await this.state.successfullLanding.forEach(val=>filteredData=filteredData.concat(this.props.datas.filter(item=>item.rocket.first_stage.cores[0].land_success===JSON.parse(val))))
+            if(filteredData.length===0) return this.setState({dataError:"No data found"})
+            return await this.setState({data:filteredData,dataError : ""})
         }
-        return await this.setState({data:collectedData})
+        return await this.setState({data:filteredData})
     }
     handleSubmit(e){
         e.preventDefault();
         if(this.state.successfullLaunchYear.length===0 && this.state.successfullLaunch.length===0 && this.state.successfullLanding.length===0 ){
-            this.setState({error:"No filter selected"});
+            return this.setState({error:"No filter selected"});
         }
-        else{           
-            this.filterData();
-            this.setState({error:"",successfullLaunchYear:[],successfullLaunch:[],successfullLanding:[]});
-        }
-        this.setState({myColor:"#c5e09a"})        
+        else{          
+            this.filterData();    
+        }        
     }    
     render(){       
         return(
@@ -138,7 +151,7 @@ class FilterPage extends Component{
                                        {
                                            this.state.launchYear.map((item,id)=>
                                                <li key={id}>
-                                                   <button style={{backgroundColor:this.state.myColor}} selected={false} onClick={this.handleClick} className="year-count">{item}</button>
+                                                   <button selected={ false} onClick={this.handleClick} className="year-count">{item}</button>
                                                </li>
                                            )
                                        }
@@ -148,15 +161,15 @@ class FilterPage extends Component{
                            <div className="successfull-launch">
                                <h5>Successfull launch</h5>
                                <div className="years">
-                                   <button style={{backgroundColor:this.state.myColor}} selected={false} onClick={this.handleClick} className="launch-count">true</button>
-                                   <button style={{backgroundColor:this.state.myColor}} selected={false} onClick={this.handleClick} className="launch-count">false</button>
+                                   <button selected={false} onClick={this.handleClick} className="launch-count">true</button>
+                                   <button selected={false} onClick={this.handleClick} className="launch-count">false</button>
                                </div>
                            </div>
                            <div className="successfull-landing">
                                <h5>Successfull landing</h5>
                                <div className="years">
-                                   <button style={{backgroundColor:this.state.myColor}} selected={false} onClick={this.handleClick} className="landing-count">true</button>
-                                   <button style={{backgroundColor:this.state.myColor}} selected={false} onClick={this.handleClick} className="landing-count">false</button>
+                                   <button selected={false} onClick={this.handleClick} className="landing-count">true</button>
+                                   <button selected={false} onClick={this.handleClick} className="landing-count">false</button>
                                </div>
                            </div>
                            <div className="submit-section">
@@ -190,10 +203,11 @@ class FilterPage extends Component{
                                 </div>
                             )
                         }
+                        <span className="error">{this.state.dataError.length>0 ? this.state.dataError : ""}</span>
                     </div>
                 </div>
                 <h3>Developed by : <span className="">Dinesh Kumar</span></h3>
-            </div>
+            </div>    
         )
     }
 }
